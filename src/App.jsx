@@ -19,6 +19,14 @@ useEffect(() => {
   localStorage.setItem("movies", JSON.stringify(movies));
 }, [movies]);
 
+const [filter, setFilter] = useState(() => {
+  return localStorage.getItem("filter") || "all";
+});
+
+useEffect(() => {
+  localStorage.setItem("filter", filter);
+}, [filter]);
+
  useEffect(() => {
   document.title = `Movie Watchlist (${movies.length})`;
 }, [movies.length]);
