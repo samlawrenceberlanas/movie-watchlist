@@ -47,6 +47,12 @@ useEffect(() => {
     setMovies ([...movies, newMovie]);
   };
 
+  const handleClearAll = () => {
+  if (confirm("Clear your entire watchlist? This cannot be undone.")) {
+    setMovies([]);
+  }
+};
+
   const visibleMovies = movies.filter((movie) => {
     if (filter === "watched") return movie.watched;
     if (filter === "unwatched") return !movie.watched;
@@ -64,6 +70,16 @@ useEffect(() => {
         </p>
       </div>
       <AddMovieForm onAddMovie={handleAddMovie}/>
+      <div className="mb-4">
+  <button
+    className="btn btn-error btn-sm"
+    onClick={handleClearAll}
+  >
+    Clear All
+  </button>
+</div>
+
+<SummaryBar movies={movies} />
       <SummaryBar movies={movies}/>
       <FilterBar filter={filter} onFilterChange={setFilter}/>
       <MovieList movies={visibleMovies} 
