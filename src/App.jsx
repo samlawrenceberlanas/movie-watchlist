@@ -5,10 +5,20 @@ import { useState } from "react";
 import FilterBar from "./components/FilterBar";
 import SummaryBar  from "./components/SummaryBar";
 import AddMovieForm from "./components/AddMovieForm";
+import { useEffect, useState } from "react";
+
+
 
 export default function App() {
-  const [movies, setMovies] = useState(moviesData);
-  const [filter, setFilter] = useState("all");
+ const [movies, setMovies] = useState(() => {
+  const saved = localStorage.getItem("movies");
+  return saved ? JSON.parse(saved) : moviesData;
+});
+
+useEffect(() => {
+  localStorage.setItem("movies", JSON.stringify(movies));
+}, [movies]);
+
 
   const handleToggleWatched = (id) => {
     setMovies(
@@ -32,6 +42,8 @@ export default function App() {
     return true;
   })
 
+
+  //layout
   return (
     <Layout>
       <div className="mb-6">
