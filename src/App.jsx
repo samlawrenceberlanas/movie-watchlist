@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import FilterBar from "./components/FilterBar";
 import SummaryBar from "./components/SummaryBar";
 import AddMovieForm from "./components/AddMovieForm";
+import { searchMovies } from "./api/tmdb";
 
 export default function App() {
   const [movies, setMovies] = useState(() => {
@@ -19,6 +20,50 @@ export default function App() {
   const [filter, setFilter] = useState(() => {
     return localStorage.getItem("filter") || "all";
   });
+
+  const [searchTerm, setSearchTerm] = useState("");
+const [results, setResults] = useState([]);
+const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState("");
+
+useEffect(() => {
+  if (!searchTerm) {
+    setResults([]);
+    setError("");
+    return;
+  }
+
+  let isCancelled = false;
+
+  const fetchMovies = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const data = await searchMovies(searchTerm);
+
+      if (!isCancelled) {
+        setResults(data);
+      }
+    } catch (err) {
+      if (!isCancelled) {
+        setError("Failed to search movies. Please try again.");
+        setResults([]);
+      }
+    } finally {
+      if (!isCancelled) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  fetchMovies();
+
+  return () => {
+    isCancelled = true;
+  };
+}, [searchTerm]);
+
 
   useEffect(() => {
     localStorage.setItem("filter", filter);
