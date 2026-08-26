@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import FilterBar from "./components/FilterBar";
 import SummaryBar from "./components/SummaryBar";
 import AddMovieForm from "./components/AddMovieForm";
+import SearchBar from "./components/SearchBar";
+import SearchResults from "./components/SearchResults";
 import { searchMovies } from "./api/tmdb";
 
 export default function App() {
@@ -112,6 +114,15 @@ useEffect(() => {
           A collection of movies I've watched and want to watch.
         </p>
       </div>
+
+      <SearchBar onSearch={setSearchTerm}/>
+<SearchResults
+  results={results}
+  isLoading={isLoading}
+  error={error}
+  onAddMovie={handleAddMovie}
+/>
+
 
       <AddMovieForm onAddMovie={handleAddMovie} />
 
